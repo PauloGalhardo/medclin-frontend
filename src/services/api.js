@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // Cria uma instância do axios com a URL base do nosso backend
 const api = axios.create({
-  baseURL: 'http://localhost:3000/api'
+  // O Vue identifica sozinho se deve usar a URL de dev ou prod
+  baseURL: process.env.VUE_APP_API_URL || 'https://medclin-api.onrender.com'
 });
 
 // Interceptor: Antes de qualquer requisição sair do frontend, ele roda essa função

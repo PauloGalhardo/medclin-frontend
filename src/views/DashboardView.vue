@@ -511,16 +511,14 @@ onMounted(loadData);
 
 /* LAYOUT MASTER */
 .grid-3-cols { 
-  display: flex; 
-  flex-wrap: nowrap;
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); /* Cria 3 colunas de tamanhos iguais */
   gap: 20px; 
-  justify-content: flex-start;
-  overflow-x: auto;
-  padding-bottom: 10px;
+  align-items: start;
 }
+
 .grid-3-cols > .card {
-  flex: 0 0 32%;
-  min-width: 300px;
+  width: 100%;
 }
 
 /* LAYOUT ADMIN */

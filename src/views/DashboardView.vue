@@ -517,7 +517,7 @@ onMounted(loadData);
   justify-content: center;
 }
 .grid-3-cols > .card {
-  flex: 0 0 calc(33% - 15px);
+  flex: 1 1 300px;
   max-width: 400px;
 }
 

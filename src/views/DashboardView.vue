@@ -512,13 +512,15 @@ onMounted(loadData);
 /* LAYOUT MASTER */
 .grid-3-cols { 
   display: flex; 
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 20px; 
-  justify-content: center;
+  justify-content: flex-start;
+  overflow-x: auto;
+  padding-bottom: 10px;
 }
 .grid-3-cols > .card {
-  flex: 1 1 300px;
-  max-width: 400px;
+  flex: 0 0 32%;
+  min-width: 300px;
 }
 
 /* LAYOUT ADMIN */

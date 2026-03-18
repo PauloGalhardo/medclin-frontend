@@ -509,19 +509,16 @@ onMounted(loadData);
 
 .main-container { padding: 2rem 3rem; width: 100%; box-sizing: border-box; }
 
-/* MASTER: 3 COLUNAS COM SCROLL HORIZONTAL
-  Isso garante que os cards mantenham a exata mesma largura (50% do container original)
-  sem serem esmagados, permitindo arrastar para o lado.
-*/
+/* LAYOUT MASTER */
 .grid-3-cols { 
   display: flex; 
-  gap: 30px; 
-  overflow-x: auto; 
-  padding-bottom: 15px; /* Espaço para a barra de rolagem não cortar a sombra */
+  flex-wrap: wrap;
+  gap: 20px; 
+  justify-content: center;
 }
 .grid-3-cols > .card {
-  flex: 0 0 calc(50% - 15px);
-  min-width: 320px; /* Garante que não quebre em telas muito pequenas */
+  flex: 0 0 calc(33% - 15px);
+  max-width: 400px;
 }
 
 /* LAYOUT ADMIN */

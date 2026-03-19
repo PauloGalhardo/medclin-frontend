@@ -12,11 +12,14 @@
     <main class="main-container">
       
       <div v-if="user.role === 'master'" class="master-scroll-container">
-        <div class="top-scrollbar-wrapper" ref="topScroll" @scroll="syncToBottom">
-          <div class="top-scrollbar-content" :style="{ width: scrollWidth + 'px' }"></div>
-        </div>
+        <div class="top-scrollbar-wrapper" ref="topScroll" @scroll="syncScroll('top')">
+        <div class="top-scrollbar-content" :style="{ width: scrollWidth + 'px' }"></div>
+      </div>
 
-        <div class="grid-3-cols" ref="mainContent" @scroll="syncToTop">
+        <div class="grid-3-cols" ref="bottomScroll" @scroll="syncScroll('bottom')">
+        <div v-for="item in lista" :key="item.id" class="card">
+         </div>
+      </div>
           <section class="card shadow border-blue">
             <h3>🔑 Novo Administrador</h3>
             <p class="subtitle">Acesso de gestão do sistema</p>
@@ -65,7 +68,7 @@
             </form>
           </section>
         </div>
-      </div>
+      
 
       <div v-if="user.role === 'admin'" class="layout-admin">
         <aside class="sidebar">
@@ -260,25 +263,28 @@ const topScroll = ref(null);
 const mainContent = ref(null);
 const scrollWidth = ref(0);
 
+// Sincroniza o movimento das duas barras
+const syncScroll = (source) => {
+  if (source === 'top') {
+    bottomScroll.value.scrollLeft = topScroll.value.scrollLeft;
+  } else {
+    topScroll.value.scrollLeft = bottomScroll.value.scrollLeft;
+  }
+};
+
+// Calcula a largura real do conteúdo para a barra de cima saber quanto scrollar
 const updateScrollWidth = () => {
-  nextTick(() => {
-    if (mainContent.value) {
-      scrollWidth.value = mainContent.value.scrollWidth;
-    }
-  });
-};
-
-const syncToBottom = () => {
-  if (mainContent.value && topScroll.value) {
-    mainContent.value.scrollLeft = topScroll.value.scrollLeft;
+  if (bottomScroll.value) {
+    scrollWidth.value = bottomScroll.value.scrollWidth;
   }
 };
 
-const syncToTop = () => {
-  if (topScroll.value && mainContent.value) {
-    topScroll.value.scrollLeft = mainContent.value.scrollLeft;
-  }
-};
+onMounted(async () => {
+  await nextTick();
+  updateScrollWidth();
+  // Atualiza se a janela mudar de tamanho
+  window.addEventListener('resize', updateScrollWidth);
+});
 // ----------------------------------------
 
 const filterPatient = ref('');
@@ -479,50 +485,59 @@ onMounted(() => {
 .btn-logout { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 .main-container { padding: 2rem 3rem; width: 100%; box-sizing: border-box; }
 
-/* --- NOVOS ESTILOS PARA BARRA DUPLA NO MASTER --- */
+/* --- ESTILOS REVISADOS PARA BARRA DUPLA --- */
 .master-scroll-container {
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* Evita que o container pai quebre */
 }
 
+/* Barra de cima (fantasma) */
 .top-scrollbar-wrapper {
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  height: 12px; /* Altura da área da barra */
+  height: 12px;
   margin-bottom: 5px;
 }
 
+/* Esse conteúdo precisa ter a mesma largura que o grid de baixo */
 .top-scrollbar-content {
-  height: 1px; /* Apenas para criar o scroll */
+  height: 1px;
 }
 
 .grid-3-cols { 
   display: flex; 
-  gap: 30px; 
+  gap: 20px; 
   overflow-x: auto; 
   padding-bottom: 15px;
+  width: 100%;
 }
 
-/* Estilização das barras para ficarem iguais */
+/* Correção da largura dos Cards */
+.grid-3-cols > .card { 
+  flex: 0 0 350px; /* Largura fixa para os cards não esticarem */
+  min-width: 350px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Estilização das barras (Webkit) */
 .grid-3-cols::-webkit-scrollbar,
 .top-scrollbar-wrapper::-webkit-scrollbar {
   height: 8px;
 }
 .grid-3-cols::-webkit-scrollbar-track,
 .top-scrollbar-wrapper::-webkit-scrollbar-track {
-  background: #e2e8f0;
-  border-radius: 10px;
+  background: #f1f5f9;
 }
 .grid-3-cols::-webkit-scrollbar-thumb,
 .top-scrollbar-wrapper::-webkit-scrollbar-thumb {
-  background: #94a3b8;
+  background: #cbd5e1;
   border-radius: 10px;
 }
-/* ----------------------------------------------- */
-
-.grid-3-cols > .card { flex: 0 0 calc(50% - 15px); min-width: 320px; }
 
 .layout-admin { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: start; }
 .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }

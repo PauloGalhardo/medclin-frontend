@@ -373,7 +373,7 @@ const fetchWeather = async (app) => {
     const viaCepRes = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
     const viaCepData = await viaCepRes.json();
     if (viaCepData.erro) { app.weatherInfo = "CEP não encontrado"; return; }
-    const apiKey = "SUA_API_KEY_AQUI"; 
+    const apiKey = "74b698ace9294e908d01d1ebe83014f6"; 
     const cidade = encodeURIComponent(viaCepData.localidade);
     const weatherRes = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cidade},BR&units=metric&lang=pt_br&appid=${apiKey}`);
     if (!weatherRes.ok) throw new Error("Erro na API de Clima");
@@ -428,13 +428,20 @@ const saveDoctor = async () => {
 
 const saveAppointment = async () => {
   try {
-    if (isEditing.value) await api.put(`/agendamentos/${editingId.value}`, form.value);
-    else await api.post('/agendamentos', form.value);
+    if (isEditing.value) {
+      await api.put(`/agendamentos/${editingId.value}`, form.value);
+    } else {
+      await api.post('/agendamentos', form.value);
+    }
     alert("Consulta salva com sucesso!");
     cancelEdit();
     showNovaConsulta.value = false;
     loadData();
-  } catch { alert("Erro ao agendar"); }
+  } catch (err) {
+    // Tenta capturar a mensagem de erro vinda do Backend (400)
+    const errorMsg = err.response?.data?.error || "Erro desconhecido ao agendar.";
+    alert(errorMsg); 
+  }
 };
 
 const editApp = (app) => {

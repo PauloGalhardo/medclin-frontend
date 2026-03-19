@@ -354,7 +354,7 @@ onMounted(() => {
   gap: 25px;
   overflow-x: auto; /* Ativa a barra de rolagem inferior */
   padding: 15px 5px;
-  width: 100%;
+  width: 50%;
   scrollbar-width: thin; /* Estilo fino no Firefox */
 }
 

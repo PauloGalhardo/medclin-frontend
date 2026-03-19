@@ -514,12 +514,32 @@ onMounted(loadData);
   display: flex; 
   gap: 30px; 
   overflow-x: auto; 
-  padding-bottom: 15px; /* Espaço para a barra de rolagem não cortar a sombra */
+  padding-top: 15px; /* Agora o espaço é no topo para a barra */
+  
+  /* Truque para a barra subir */
+  transform: rotateX(180deg);
 }
 
 .grid-3-cols > .card {
   flex: 0 0 calc(50% - 15px);
-  min-width: 320px; /* Garante que não quebre em telas muito pequenas */
+  min-width: 320px;
+  
+  /* Inverte o conteúdo de volta para o normal */
+  transform: rotateX(180deg);
+}
+
+/* Opcional: Estilizar a barra para ficar mais elegante no topo */
+.grid-3-cols::-webkit-scrollbar {
+  height: 8px;
+}
+
+.grid-3-cols::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+
+.grid-3-cols::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 10px;
 }
 
 /* LAYOUT ADMIN */

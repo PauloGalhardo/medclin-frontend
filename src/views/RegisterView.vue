@@ -41,7 +41,7 @@ const router = useRouter();
 const form = ref({
   name: '',
   email: '',
-  phone: '', // Campo novo
+  phone: '', 
   password: ''
 });
 

@@ -262,7 +262,6 @@ const newUser = ref({ name: '', email: '', password: '', phone: '', role: 'pacie
 const newAdmin = ref({ name: '', email: '', password: '', phone: '', role: 'admin' });
 const newDoctor = ref({ name: '', specialty: '', phone: '', email: '', password: '' });
 
-// O CEP foi removido do formulário de agendamento conforme solicitado
 const form = ref({ patientId: user.role === 'paciente' ? user.id : '', doctorName: '', date: '', time: '' });
 
 const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
@@ -270,7 +269,7 @@ const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
 const formatDate = (d) => d ? d.split('-').reverse().join('/') : '';
 const getSpecialty = (n) => doctors.value.find(d => d.name === n)?.specialty || 'Médico';
 
-// BUSCA DE CEP AUTOMÁTICA
+// Busca de endereço automática via CEP
 const buscarCep = async () => {
   const cepLimpo = newUser.value.cep.replace(/\D/g, '');
   if (cepLimpo.length === 8) {
@@ -365,13 +364,13 @@ const formatPhoneDoctor = (e) => {
   newDoctor.value.phone = v;
 };
 
-// BUSCA DE CLIMA USANDO O CEP DO CADASTRO DO PACIENTE (Linkado)
+// Busca de clima usando o CEP do cadastro do paciente
 const fetchWeather = async (app) => {
   try {
     const pId = typeof app.patientId === 'object' ? app.patientId._id : app.patientId;
     const patientObj = patients.value.find(p => p._id === pId);
     
-    // Tenta pegar o CEP do paciente na lista de pacientes, se não achar, tenta pegar do localStorage (útil para quando o próprio paciente logado visualiza)
+    // Tenta pegar o CEP do paciente na lista de pacientes, se não achar, tenta pegar do localStorage
     const cepParaBusca = patientObj?.cep || (user.role === 'paciente' ? user.cep : null);
 
     if (!cepParaBusca) {
@@ -497,7 +496,9 @@ onMounted(loadData);
 </script>
 
 <style scoped>
-/* ESTRUTURA BASE E HEADER (100%) */
+
+/* Estrututra base e header */
+
 .dashboard-wrapper { width: 100%; min-height: 100vh; background: #f1f5f9; }
 
 .navbar { 
@@ -516,10 +517,7 @@ onMounted(loadData);
 
 .main-container { padding: 2rem 3rem; width: 100%; box-sizing: border-box; }
 
-/* MASTER: 3 COLUNAS COM SCROLL HORIZONTAL
-  Isso garante que os cards mantenham a exata mesma largura (50% do container original)
-  sem serem esmagados, permitindo arrastar para o lado.
-*/
+/* Layout MASTER: 3 COLUNAS COM SCROLL HORIZONTAL */
 .grid-3-cols { 
   display: flex; 
   gap: 30px; 
@@ -531,7 +529,7 @@ onMounted(loadData);
   min-width: 320px; /* Garante que não quebre em telas muito pequenas */
 }
 
-/* LAYOUT ADMIN */
+/* Layout ADMIN */
 .layout-admin { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: start; }
 .header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
 .btn-primary-sm { background: #2563eb; color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
@@ -548,22 +546,22 @@ onMounted(loadData);
 .filter-action { padding-bottom: 2px; }
 .btn-clear { background: #e2e8f0; color: #475569; border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; }
 
-/* LAYOUT PACIENTE */
+/* Layout PACIENTE */
 .patient-layout { display: flex; flex-direction: column; gap: 30px; }
 .patient-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
 
-/* AUXILIARES DE ENDEREÇO */
+/* Auxilares de Endereço */
 .form-row-custom { display: flex; gap: 10px; }
 .input-readonly { background: #f8fafc; color: #64748b; cursor: not-allowed; }
 
-/* MÉDICO: NOVO LAYOUT DE CARDS SUGERIDO */
+/* Layout MEDICO */
 .medico-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
 .medico-app-card { background: white; border-radius: 12px; padding: 20px; border-left: 6px solid #10b981; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0;}
 .medico-app-header { display: flex; justify-content: space-between; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; margin-bottom: 10px; }
 .medico-time { font-weight: bold; color: #10b981; }
 .medico-app-body p { margin: 5px 0; color: #475569; font-size: 0.9rem; }
 
-/* ESTILOS COMUNS */
+/* Estilos comuns */
 .card { background: white; border-radius: 12px; padding: 1.5rem; }
 .shadow { box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
 .subtitle { color: #64748b; font-size: 0.9rem; margin-top: -10px; margin-bottom: 20px; }
@@ -573,13 +571,13 @@ input, select { padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; fo
 .btn-success, .btn-success-sm { background: #10b981; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 .btn-cancel { background: #ef4444; color: white; border: none; padding: 14px; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-/* TABELA ADMIN */
+/* Tabela ADMIN */
 .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
 .admin-table th { text-align: left; padding: 12px; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 0.8rem; }
 .admin-table td { padding: 12px; border-bottom: 1px solid #f1f5f9; }
 .text-pink { color: #db2777; font-weight: bold; }
 
-/* ITENS PACIENTE */
+/* Itens PACIENTE */
 .app-item { background: #f8fafc; border-left: 5px solid #2563eb; padding: 15px; border-radius: 10px; margin-bottom: 15px; }
 .specialty { color: #64748b; font-weight: normal; font-size: 0.9rem; }
 .weather { color: #d97706; font-weight: bold; display: block; margin-top: 8px;}

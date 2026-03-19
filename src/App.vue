@@ -5,7 +5,7 @@
 </template>
 
 <style>
-/* Estilo global super básico para resetar margens */
+/* Estilo básico para resetar margens */
 body {
   margin: 0;
   font-family: Arial, sans-serif;

@@ -79,7 +79,7 @@ const formData = ref({
 
 const doctorData = ref({ email: '', password: '' });
 
-// Lógica de busca de CEP (ViaCEP)
+// Logica de busca de CEP (ViaCEP)
 const buscarCep = async () => {
   const cepLimpo = formData.value.cep.replace(/\D/g, '');
   if (cepLimpo.length === 8) {
@@ -140,7 +140,7 @@ const handleDoctorLogin = async () => {
 </script>
 
 <style scoped>
-/* ESTILOS ORIGINAIS V3.0 PRESERVADOS */
+
 .login-container { min-height: 100vh; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; padding: 40px 20px; }
 .hero { text-align: center; margin-bottom: 40px; }
 
@@ -155,12 +155,12 @@ const handleDoctorLogin = async () => {
   width: 100%; 
 }
 
-/* Dimensões do Card conforme aprovado na V3.0 */
+/* Dimensões do Card */
 .auth-card { 
   background: white; 
   padding: 30px; 
   border-radius: 12px; 
-  width: 400px; /* Largura fixa mantida */
+  width: 400px; 
   box-sizing: border-box;
 }
 

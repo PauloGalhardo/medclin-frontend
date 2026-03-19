@@ -458,13 +458,20 @@ const saveDoctor = async () => {
 
 const saveAppointment = async () => {
   try {
-    if (isEditing.value) await api.put(`/agendamentos/${editingId.value}`, form.value);
-    else await api.post('/agendamentos', form.value);
+    if (isEditing.value) {
+      await api.put(`/agendamentos/${editingId.value}`, form.value);
+    } else {
+      await api.post('/agendamentos', form.value);
+    }
     alert("Consulta salva com sucesso!");
     cancelEdit();
     showNovaConsulta.value = false;
     loadData();
-  } catch { alert("Erro ao agendar"); }
+  } catch (err) {
+    // Tenta capturar a mensagem de erro vinda do Backend (400)
+    const errorMsg = err.response?.data?.error || "Erro desconhecido ao agendar.";
+    alert(errorMsg); 
+  }
 };
 
 const editApp = (app) => {
